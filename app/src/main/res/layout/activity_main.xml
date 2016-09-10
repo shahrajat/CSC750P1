@@ -15,7 +15,9 @@
         android:layout_centerHorizontal="true"
         android:textSize="50px"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/pageTitle"
+        android:textColor="#ed0c0c" />
 
     <TextView
         android:text="Following information will be revealed in
@@ -26,15 +28,73 @@ case of any emergency:\n
         android:layout_marginTop="100px"
         android:textSize="35px"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    
+        android:layout_height="wrap_content"
+        android:id="@+id/infoBox" />
+
+    <!-- General Reading Text -->
+    <TextView
+        android:text="@string/sensor_readings"
+        android:textSize="50px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sensorReadings"
+        android:layout_below="@+id/infoBox"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="23dp"
+        android:textColor="#0456e5" />
+
+    <!-- Light Sensor Readings -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/light_sensor_reading"
+        android:id="@+id/lightLabel"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lightText"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Location -->
+    <TextView
+        android:text="@string/location_reading"
+        android:textSize="45px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationLabel"
+        android:layout_below="@+id/lightText"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="39dp"
+        android:layout_alignEnd="@+id/sensorReadings" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/latitudeText"
+        android:layout_alignBottom="@+id/locationLabel"
+        android:layout_alignStart="@+id/lightText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/longitudeText"
+        android:layout_alignTop="@+id/latitudeText"
+        android:layout_toEndOf="@+id/latitudeText"
+        android:layout_marginStart="25dp" />
+
+    <!-- Notification Button -->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
         android:text="Show Notification"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:onClick="showNotification"/>
+        android:onClick="showNotification"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

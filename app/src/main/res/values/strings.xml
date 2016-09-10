@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CSC750P1</string>
+    <string name="sensor_readings">Current Sensor Readings:</string>
+    <string name="light_sensor_reading">Light Sensor Reading:</string>
+    <string name="location_reading">Location Reading:</string>
+    
 </resources>
