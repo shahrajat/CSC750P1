@@ -9,8 +9,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
@@ -23,6 +21,7 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.vision.text.Text;
 
 import java.util.Random;
 
@@ -32,21 +31,39 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mLightTextLabel;
     private TextView mLatitudeText;
     private TextView mLongitudeText;
+    private TextView mRexDistanceText;
+    private TextView mAccelerationText;
 
     private SensorManager mSensorManager;
     private SensorEventListener mEventListenerLight;
+    private SensorEventListener mEventListenerAccelerometer;
+
     private float lastLightValue;
+    private float lastAccelerationY;
+    private float[] locationResults;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-
-    private void updateUI() {
+    private enum SensorType {
+        LIGHT, ACCELEROMETER, LOCATION
+    };
+    // Create a new thread to update the UI
+    private void updateUI(final SensorType sensorType) {
         runOnUiThread(new Runnable() {
             @Override
 
             public void run() {
-                LocationManager locationManager = (LocationManager)
-                        getSystemService(Context.LOCATION_SERVICE);
-                mLightTextLabel.setText(""+lastLightValue);
+                switch (sensorType) {
+                    case LIGHT:
+                        mLightTextLabel.setText(String.valueOf(lastLightValue));
+                        break;
+                    case ACCELEROMETER:
+                        mAccelerationText.setText(String.valueOf(lastAccelerationY));
+                        break;
+                    case LOCATION:
+                        mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+                        mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                        mRexDistanceText.setText(String.valueOf(locationResults[0]) + "m"); //Set the distance from Current location
+                }
             }
         });
     }
@@ -64,7 +81,26 @@ public class MainActivity extends AppCompatActivity implements
             public void onSensorChanged(SensorEvent sensorEvent) {
                 float[] values = sensorEvent.values;
                 lastLightValue = values[0];
-                updateUI();
+                updateUI(SensorType.LIGHT);
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+
+            }
+        };
+
+        //Accelerometer
+        mAccelerationText = (TextView) findViewById(R.id.accelerationText);
+        mEventListenerAccelerometer = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                float[] values = sensorEvent.values;
+                //update UI only when change is significant
+                if(lastAccelerationY == 0.0 || Math.abs(lastAccelerationY-values[1]) > 0.5) {
+                    lastAccelerationY = values[1];
+                    updateUI(SensorType.ACCELEROMETER);
+                }
             }
 
             @Override
@@ -77,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements
         // Create an instance of GoogleAPIClient
         mLatitudeText = (TextView) findViewById(R.id.latitudeText);
         mLongitudeText = (TextView)  findViewById(R.id.longitudeText);
+        mRexDistanceText = (TextView) findViewById(R.id.distanceText);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -96,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onResume() {
         super.onResume();
         mSensorManager.registerListener(mEventListenerLight, mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(mEventListenerAccelerometer, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -103,15 +141,7 @@ public class MainActivity extends AppCompatActivity implements
         mGoogleApiClient.disconnect(); //location
         super.onStop();
         mSensorManager.unregisterListener(mEventListenerLight);
-    }
-
-    /*
-    Returns true with half probabilty
-     */
-    public boolean isFreeFall() {
-        Random rand = new Random();
-        int randomNum = rand.nextInt(10) + 1;
-        return randomNum >=5;
+        mSensorManager.unregisterListener(mEventListenerAccelerometer);
     }
 
     public void showNotification(View view) {
@@ -142,8 +172,12 @@ public class MainActivity extends AppCompatActivity implements
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
             if (mLastLocation != null) {
-                mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-                mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                double rexHospitalLatitude = 35.8178743;    //Hardcoded coordinates of Rex Hospital
+                double rexHospitalLongitude = -78.702539;
+                locationResults =  new float[1];
+                Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(),
+                        rexHospitalLatitude, rexHospitalLongitude, locationResults);
+                updateUI(SensorType.LOCATION);
             }
         } catch (SecurityException ex) {
 

@@ -63,13 +63,13 @@ case of any emergency:\n
     <!-- Location -->
     <TextView
         android:text="@string/location_reading"
-        android:textSize="45px"
+        android:textSize="30px"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/locationLabel"
         android:layout_below="@+id/lightText"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="10dp"
         android:layout_alignEnd="@+id/sensorReadings" />
 
     <EditText
@@ -77,7 +77,8 @@ case of any emergency:\n
         android:layout_height="wrap_content"
         android:id="@+id/latitudeText"
         android:layout_alignBottom="@+id/locationLabel"
-        android:layout_alignStart="@+id/lightText" />
+        android:layout_alignStart="@+id/lightText"
+        android:textSize="25px" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -85,7 +86,42 @@ case of any emergency:\n
         android:id="@+id/longitudeText"
         android:layout_alignTop="@+id/latitudeText"
         android:layout_toEndOf="@+id/latitudeText"
-        android:layout_marginStart="25dp" />
+        android:layout_marginStart="25dp"
+        android:textSize="25px" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance From Rex Hosp."
+        android:id="@+id/distanceLabel"
+        android:layout_alignBottom="@+id/distanceText"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distanceText"
+        android:layout_below="@+id/locationLabel"
+        android:layout_toEndOf="@+id/latitudeText"
+        android:textSize="25px" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acceleration:"
+        android:id="@+id/accelerationLabel"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/distanceLabel"
+        android:layout_alignStart="@+id/distanceLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/accelerationText"
+        android:layout_alignBottom="@+id/accelerationLabel"
+        android:layout_alignStart="@+id/pageTitle"
+        android:textSize="25px" />
 
     <!-- Notification Button -->
     <Button
@@ -96,5 +132,6 @@ case of any emergency:\n
         android:onClick="showNotification"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>
