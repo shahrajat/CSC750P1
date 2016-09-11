@@ -35,8 +35,6 @@ Following Conditions should be simultaneously met to generate a notification wit
 
 ## Sample Screenshots
 <p align="center">
-  <img src="https://media.giphy.com/media/l2Sqbp2Ftzttwsydi/giphy.gif" />
-</p>
-<p align="center">
+  <img src="https://media.giphy.com/media/26ufcVxET21XK5HUI/giphy.gif" style="margin-right:30px" />
   <img src="https://media.giphy.com/media/26ufdf0kAOt3Gniko/giphy.gif" />
 </p>
