@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mLightTextLabel;
     private TextView mLatitudeText;
     private TextView mLongitudeText;
+    private TextView mLocationText;
     private TextView mRexDistanceText;
     private TextView mAccelerationText;
     private TextView mPressureText;
@@ -59,14 +61,15 @@ public class MainActivity extends AppCompatActivity implements
             public void run() {
                 switch (sensorType) {
                     case LIGHT:
-                        mLightTextLabel.setText(String.valueOf(lastLightValue));
+                        mLightTextLabel.setText(String.valueOf(lastLightValue) + " lux");
                         break;
                     case ACCELEROMETER:
-                        mAccelerationText.setText(String.valueOf(lastAccelerationY));
+                        mAccelerationText.setText(String.valueOf(lastAccelerationY) + " m/s^2");
                         break;
                     case LOCATION:
-                        mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-                        mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                        mLocationText.setText("(" + String.valueOf(mLastLocation.getLatitude()) + "," + mLastLocation.getLongitude() + ")");
+                        //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+                        //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
                         mRexDistanceText.setText(String.valueOf(locationResults[0]) + " m"); //Set the distance from Current location
                         break;
                     case PRESSURE:
@@ -81,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //Start the background service
+        startService(new Intent(getApplicationContext(), BackgroundService.class));
         //Light Sensor
         mLightTextLabel = (TextView) findViewById(R.id.lightText);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -138,8 +142,9 @@ public class MainActivity extends AppCompatActivity implements
 
         //Location Listener
         // Create an instance of GoogleAPIClient
-        mLatitudeText = (TextView) findViewById(R.id.latitudeText);
-        mLongitudeText = (TextView)  findViewById(R.id.longitudeText);
+        //mLatitudeText = (TextView) findViewById(R.id.latitudeText);
+        //mLongitudeText = (TextView)  findViewById(R.id.longitudeText);
+        mLocationText = (TextView) findViewById(R.id.locationText);
         mRexDistanceText = (TextView) findViewById(R.id.distanceText);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -148,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements
                     .addApi(LocationServices.API)
                     .build();
         }
+        showNotification();
     }
 
     @Override
@@ -173,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements
         mSensorManager.unregisterListener(mEventListenerPressure);
     }
 
-    public void showNotification(View view) {
+    public void showNotification() {
         String msg = getResources().getString(R.string.notification_msg);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher);

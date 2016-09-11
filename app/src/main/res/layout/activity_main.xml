@@ -74,19 +74,27 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/locationText"
+        android:textSize="25px"
+        android:layout_below="@+id/lightText"
+        android:layout_toEndOf="@+id/lightLabel" />
+
+    <!--<EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/latitudeText"
         android:textSize="25px"
         android:layout_above="@+id/distanceText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true" />-->
 
-    <EditText
+    <!--<EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/longitudeText"
         android:layout_alignTop="@+id/latitudeText"
         android:layout_toEndOf="@+id/latitudeText"
         android:layout_marginStart="25dp"
-        android:textSize="25px" />
+        android:textSize="25px" />-->
 
 
     <TextView
@@ -102,8 +110,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/distanceText"
         android:textSize="25px"
-        android:layout_below="@+id/locationLabel"
-        android:layout_toEndOf="@+id/latitudeText" />
+        android:layout_below="@+id/locationText"
+        android:layout_toEndOf="@+id/infoBox" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -119,11 +127,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/accelerationText"
         android:textSize="25px"
-        android:layout_below="@+id/distanceLabel"
-        android:layout_toEndOf="@+id/accelerationLabel" />
+        android:layout_above="@+id/pressureLabel"
+        android:layout_toEndOf="@+id/pressureLabel" />
 
     <!-- Notification Button -->
-    <Button
+    <!--<Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
@@ -131,7 +139,7 @@
         android:onClick="showNotification"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
+-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -145,9 +153,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/pressureText"
-        android:layout_below="@+id/accelerationText"
-        android:layout_toEndOf="@+id/pressureLabel"
-        android:textSize="25px"/>
+        android:textSize="25px"
+        android:layout_alignBottom="@+id/pressureLabel"
+        android:layout_toEndOf="@+id/lightLabel" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -158,6 +166,8 @@
         android:layout_alignParentStart="true"
         android:textSize="40px"
         android:layout_marginTop="10dp" />
+
+
 
 
 </RelativeLayout>
