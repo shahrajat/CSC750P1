@@ -3,5 +3,5 @@
     <string name="sensor_readings">Current Sensor Readings:</string>
     <string name="light_sensor_reading">Light Sensor Reading:</string>
     <string name="location_reading">Location Reading:</string>
-    
+    <string name="notification_msg">Blood Group:O-\nNot Diabetic\nBlood Pressure: 92 mm Hg\nHeart Rate: 82bpm</string>
 </resources>

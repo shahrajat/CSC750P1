@@ -174,12 +174,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void showNotification(View view) {
+        String msg = getResources().getString(R.string.notification_msg);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentTitle("Emergency Details");
-        builder.setContentText("Blood Group: O- \n No Allergies \n Emergency Contact: 911");
+        builder.setContentText(msg);
 
         Intent intent = new Intent(this, NotificationClass.class);
+        intent.putExtra("More Information:", msg);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(NotificationClass.class);
         stackBuilder.addNextIntent(intent);
@@ -187,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setContentIntent(pendingIntent);
+        builder.setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(msg));     //to show bigger expandable notification
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, builder.build());
