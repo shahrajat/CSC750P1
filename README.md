@@ -23,11 +23,20 @@ Minimum requirements:
 
 Dependencies and External Libraries:
 - Google Play Services: 9.0.2
+- Android Kitat: 4.4
+
+## Implemented Approach
+Following Conditions should be simultaneously met to generate a notification with PHI:
+
+- User is **falling**: The Accelerometer Sensor of Android provides acceleration of the phone in each direction in 3D space. When the verticle (Y-axis acceleration) of the user be comes in the range of 9-10m/s^2, it is considered as falling. Ideally it should be 9.8m/s^2, but generating test case for this is non-trivial.
+- The time needed to drive to the **nearest hospital** is greater than 5 minutes: Using the Google Maps API and Location service in Google Play Services, the users current location is determined. The distance to Hospital is then caculated and if it less than a threshold of 6000meters (or 6KM), it is considered to be reachable in 5 minutes.
+- The **barometric pressure** reading is less than 29.5(==0.9989847 Bar) inches of mercury: Using the Pressure Sensor API in Android, the pressure is caculated in Bar unit. At normal circumstances it is close to 1Bar (==29.53 inches of mercury). In order to be practically tested, the upper threshold for determining  
+- The **light** is less than 400 lx: The Light Sensor API in Android provides the light exposure value of the device.
 
 ## Sample Screenshots
 <p align="center">
-  <img src="https://media.giphy.com/media/3o6Zt6dlkJpOWccURG/giphy.gif" />
+  <img src="https://media.giphy.com/media/l2Sqbp2Ftzttwsydi/giphy.gif" />
 </p>
 <p align="center">
-  <img src="https://media.giphy.com/media/3oz8xG21u7llw4pkek/giphy.gif" />
+  <img src="https://media.giphy.com/media/26ufdf0kAOt3Gniko/giphy.gif" />
 </p>
