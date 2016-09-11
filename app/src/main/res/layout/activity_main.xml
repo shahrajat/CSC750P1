@@ -133,5 +133,21 @@ case of any emergency:\n
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pressure Reading:"
+        android:id="@+id/pressureLabel"
+        android:layout_below="@+id/accelerationLabel"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pressureText"
+        android:layout_below="@+id/accelerationText"
+        android:layout_toEndOf="@+id/pressureLabel" />
+
 
 </RelativeLayout>

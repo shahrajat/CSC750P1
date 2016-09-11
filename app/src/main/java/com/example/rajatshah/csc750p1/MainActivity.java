@@ -33,18 +33,23 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mLongitudeText;
     private TextView mRexDistanceText;
     private TextView mAccelerationText;
+    private TextView mPressureText;
 
     private SensorManager mSensorManager;
     private SensorEventListener mEventListenerLight;
     private SensorEventListener mEventListenerAccelerometer;
+    private SensorEventListener mEventListenerPressure;
+
 
     private float lastLightValue;
     private float lastAccelerationY;
     private float[] locationResults;
+    private float pressureValue;
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private enum SensorType {
-        LIGHT, ACCELEROMETER, LOCATION
+        LIGHT, ACCELEROMETER, LOCATION, PRESSURE
     };
     // Create a new thread to update the UI
     private void updateUI(final SensorType sensorType) {
@@ -62,7 +67,11 @@ public class MainActivity extends AppCompatActivity implements
                     case LOCATION:
                         mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
                         mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-                        mRexDistanceText.setText(String.valueOf(locationResults[0]) + "m"); //Set the distance from Current location
+                        mRexDistanceText.setText(String.valueOf(locationResults[0]) + " m"); //Set the distance from Current location
+                        break;
+                    case PRESSURE:
+                        mPressureText.setText(String.valueOf(pressureValue) + " bar");
+                        break;
                 }
             }
         });
@@ -109,6 +118,24 @@ public class MainActivity extends AppCompatActivity implements
             }
         };
 
+        //Pressure
+        mPressureText = (TextView) findViewById(R.id.pressureText);
+        mEventListenerPressure = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                float[] values = sensorEvent.values;
+                if(pressureValue == 0.0 || Math.abs(pressureValue-values[0]/1000) > 0.0001) {
+                    pressureValue = values[0]/1000; //convert from millibar to bar
+                    updateUI(SensorType.PRESSURE);
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+
+            }
+        };
+
         //Location Listener
         // Create an instance of GoogleAPIClient
         mLatitudeText = (TextView) findViewById(R.id.latitudeText);
@@ -134,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         mSensorManager.registerListener(mEventListenerLight, mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_FASTEST);
         mSensorManager.registerListener(mEventListenerAccelerometer, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(mEventListenerPressure, mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -142,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onStop();
         mSensorManager.unregisterListener(mEventListenerLight);
         mSensorManager.unregisterListener(mEventListenerAccelerometer);
+        mSensorManager.unregisterListener(mEventListenerPressure);
     }
 
     public void showNotification(View view) {
@@ -151,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements
         builder.setContentText("Blood Group: O- \n No Allergies \n Emergency Contact: 911");
 
         Intent intent = new Intent(this, NotificationClass.class);
-
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(NotificationClass.class);
         stackBuilder.addNextIntent(intent);
@@ -161,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements
         builder.setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         notificationManager.notify(0, builder.build());
     }
 
