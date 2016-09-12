@@ -25,6 +25,8 @@ Dependencies and External Libraries:
 - Google Play Services: 9.0.2
 - Android Kitat: 4.4
 
+In order to run the application locally, download the source code and import it in Android Studio. Then Compile and run it either in an emulator or export it as an APK to Android device.
+
 ## Implemented Approach
 Following Conditions should be simultaneously met to generate a notification with PHI:
 
